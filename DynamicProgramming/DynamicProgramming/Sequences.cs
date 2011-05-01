@@ -40,6 +40,36 @@ namespace DynamicProgramming
             return togglingSequence[elements.Count-1].Count;
         }
 
+        public static int LeastCommonSubsequence<T>(this List<T> elements,List<T> secondList)
+        {
+            var commonSubsequenceLength = new int[elements.Count+1,secondList.Count+1];
+            for (var i = 0; i <= elements.Count; i++)
+            {
+                commonSubsequenceLength[i, 0] = 0;
+            }
+            for (var j = 0; j <=secondList.Count; j++)
+            {
+                commonSubsequenceLength[0, j] = 0;
+            }
+
+            for (int i = 0; i < elements.Count; i++)
+            {
+                for (int j = 0; j < secondList.Count; j++)
+                {
+                    if (elements[i].Equals(secondList[j]))
+                        commonSubsequenceLength[i+1, j+1] = commonSubsequenceLength[i, j] + 1;
+                    else
+                    {
+                        commonSubsequenceLength[i+1, j+1] = commonSubsequenceLength[i, j+1] >
+                                                        commonSubsequenceLength[i+1, j]
+                                                            ? commonSubsequenceLength[i, j+1]
+                                                            : commonSubsequenceLength[i+1, j];
+                    }
+                }
+            }
+            return commonSubsequenceLength[elements.Count,secondList.Count];
+        }
+
         private class ToggleData
         {
             public int Count { get; private set; }
